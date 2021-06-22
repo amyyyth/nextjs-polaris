@@ -1,5 +1,8 @@
 import Head from 'next/head';
-import {AppProvider, Page, Banner, Card, IndexTable, useIndexResourceState, TextStyle, Button } from  '@shopify/polaris';
+import {AppProvider, Page,Icon, Banner,TextContainer, ExceptionList, Card, IndexTable, useIndexResourceState, TextStyle, Button } from  '@shopify/polaris';
+import {
+  TickMinor
+} from '@shopify/polaris-icons';
 
 export default function Home() {
   function handleApprove(selectedIds){
@@ -20,7 +23,7 @@ export default function Home() {
       created: '20 June, 2020',
       phone: '+91 9999999999',
       status: 'Approved',
-      review: 'This is a review',
+      review: 'This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review ',
     },
     {
       id: '123',
@@ -80,9 +83,19 @@ export default function Home() {
         selected={selectedResources.includes(id)}
         position={index}
       >
-        <IndexTable.Cell>{rating}</IndexTable.Cell>
-        <IndexTable.Cell>
-          <TextStyle variation="strong">{name}</TextStyle><br /><br />
+        <IndexTable.Cell>{rating}
+        {status === 'Approved'?
+          <ExceptionList
+          items={[
+            {
+              icon: TickMinor ,
+              description: 'Approved',
+            },
+          ]}
+        />
+        :
+        <>
+          <br/>
           <button
            onClick={() => {console.log('Approve: '+ String(id))}}
            style={{
@@ -97,7 +110,11 @@ export default function Home() {
            >
             Approve
           </button>
+        </>
+        }
+        
         </IndexTable.Cell>
+        
         <IndexTable.Cell>{created}</IndexTable.Cell>
         <IndexTable.Cell>{phone}</IndexTable.Cell>
         <IndexTable.Cell>
@@ -106,7 +123,7 @@ export default function Home() {
           <span style={{backgroundColor: "#aedcf3", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>
           }
         </IndexTable.Cell>
-        <IndexTable.Cell>{review}</IndexTable.Cell>
+        <IndexTable.Cell> <TextStyle variation="strong">{name}</TextStyle> wrote a review:<br/><TextContainer>{review}</TextContainer></IndexTable.Cell>
       </IndexTable.Row>
     ),
   );
@@ -139,13 +156,13 @@ export default function Home() {
                 promotedBulkActions={promotedBulkActions}
                 headings={[
                   {title: 'Rating'},
-                  {title: 'Name'},
                   {title: 'Created'},
                   {title: 'Phone'},
                   {title: 'Status'},
                   {title: 'Review'},
                   
                 ]}
+                //hasMoreItems={true}
               >
                 
                 {rowMarkup}
