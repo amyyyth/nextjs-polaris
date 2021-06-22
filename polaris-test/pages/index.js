@@ -101,6 +101,7 @@ export default function Home() {
               id={id}
             />
           </div>
+          
           <div style={{margin: '10px'}}>
             <p>{rating}</p>
           </div>
@@ -132,8 +133,8 @@ export default function Home() {
             <div style={{display: 'flex'}}>
             <Icon
               source={TickMinor}
-              color="base" margin="none" />
-            <span style={{marginRight: "20px"}}>Approved</span>
+              color="subdued" margin="none" />
+            <span style={{marginRight: "20px"}}><TextStyle variation='subdued'>Approved</TextStyle></span>
             </div>
             <div style={{display: 'flex'}}>
               
