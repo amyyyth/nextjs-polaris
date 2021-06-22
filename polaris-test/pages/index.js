@@ -1,7 +1,7 @@
 import Head from 'next/head';
-import {AppProvider, Page,Icon, Banner,TextContainer, ExceptionList, Card, IndexTable, useIndexResourceState, TextStyle, Button } from  '@shopify/polaris';
+import {AppProvider, Page,Icon,  Banner,TextContainer, ExceptionList, Checkbox, Card, IndexTable, useIndexResourceState, TextStyle, Button } from  '@shopify/polaris';
 import {
-  TickMinor
+  TickMinor, EditMinor
 } from '@shopify/polaris-icons';
 
 export default function Home() {
@@ -13,6 +13,9 @@ export default function Home() {
   }
   function handleDelete(selectedIds){
     console.log('Delete: '+selectedIds.join());
+  }
+  function handleEdit(selectedId){
+    console.log('Edit: '+selectedId)
   }
   const customers = [
     {
@@ -43,6 +46,16 @@ export default function Home() {
       created: '31 June, 2020',
       phone: '+91 9999999999',
       status: 'Published',
+      review: 'This is a review',
+    },
+    {
+      id: '145',
+      rating: '3',
+      url: 'customers/145',
+      name: 'Sherlock Holmes',
+      created: '9 June, 2020',
+      phone: '+91 9999999999',
+      status: 'Approved',
       review: 'This is a review',
     },
   ];
@@ -77,54 +90,96 @@ export default function Home() {
 
   const rowMarkup = customers.map(
     ({id,rating, name, created, phone, review, status}, index) => (
-      <IndexTable.Row
-        id={id}
-        key={id}
-        selected={selectedResources.includes(id)}
-        position={index}
-      >
-        <IndexTable.Cell>{rating}
+      <Card style={{width: "100%",}}>
+        
+        <div style={{display: 'grid', gridTemplateColumns: '5% 7% 15% 15% 17% 13% 23%', width: '100%'}}>
+
+          <div style={{margin: '10px'}}>
+            <Checkbox
+              checked={selectedResources.includes(id)}
+              onChange={() => {handleSelectionChange('single',!(selectedResources.includes(id)),id)}}
+              id={id}
+            />
+          </div>
+          <div style={{margin: '10px'}}>
+            <p>{rating}</p>
+          </div>
+          <div style={{margin: '10px'}}>
+            <p>{name}</p>
+          </div>
+          <div style={{margin: '10px'}}>
+            <p>{created}</p>
+          </div>
+          <div style={{margin: '10px'}}>
+            <p>{phone}</p>
+          </div>
+          <div style={{margin: '10px'}}>
+            <p>{status === 'Approved'? <span style={{backgroundColor: "#f3c583", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>: 
+                status === 'Published'? <span style={{backgroundColor: "#bbe5b3", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>:
+                <span style={{backgroundColor: "#aedcf3", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>
+           }
+            </p>
+          </div>
+          <div style={{margin: '10px'}}>
+            <p>{review}</p>
+          </div>
+        </div>
+        <div style={{padding: "20px", position: 'relative', left: '0', bottom: '0'}}>
         {status === 'Approved'?
-          <ExceptionList
-          items={[
-            {
-              icon: TickMinor ,
-              description: 'Approved',
-            },
-          ]}
-        />
+          <>
+                       
+            <div style={{display: 'flex', width: '20%'}}>
+            <div style={{display: 'flex'}}>
+            <Icon
+              source={TickMinor}
+              color="base" margin="none" />
+            <span style={{marginRight: "20px"}}>Approved</span>
+            </div>
+            <div style={{display: 'flex'}}>
+              
+              <Icon
+                source={EditMinor}
+                color='primary' />
+                <a onClick={() => {handleEdit(id)}} style={{textDecoration: 'none', cursor: 'pointer'}}>
+              <TextStyle variation='positive'>Edit</TextStyle>
+              </a>
+            </div>
+            </div>
+          </>
         :
         <>
-          <br/>
-          <button
-           onClick={() => {console.log('Approve: '+ String(id))}}
-           style={{
-             backgroundColor: '#2575cf',
-             padding: '5px 10px 5px 10px',
-             borderRadius: '3px',
-             outline: 'none',
-             border: 'none',
-             color: 'white',
-             cursor: 'pointer'
-           }}
-           >
+          <div style={{display: 'flex', width: '20%', alignItems: 'end', justifyContent: 'middle'}}>
+            <div style={{display: 'flex', alignItems: 'end', justifyContent: 'middle'}}>
+            <button
+            onClick={() => {console.log('Approve: '+ String(id))}}
+            style={{
+              backgroundColor: '#2575cf',
+              padding: '5px 10px 5px 10px',
+              borderRadius: '3px',
+              outline: 'none',
+              border: 'none',
+              color: 'white',
+              cursor: 'pointer',
+              marginRight: '20px'
+            }}
+            >
             Approve
           </button>
+            </div>
+            <div style={{display: 'flex'}}>
+              <Icon
+                source={EditMinor}
+                color='primary' />
+              <a onClick={() => {handleEdit(id)}} style={{textDecoration: 'none', cursor: 'pointer'}}>
+                <TextStyle variation='positive'>Edit</TextStyle>
+              </a>
+            </div>
+            </div>
+          
         </>
         }
-        
-        </IndexTable.Cell>
-        
-        <IndexTable.Cell>{created}</IndexTable.Cell>
-        <IndexTable.Cell>{phone}</IndexTable.Cell>
-        <IndexTable.Cell>
-          {status === 'Approved'? <span style={{backgroundColor: "#f3c583", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>: 
-          status === 'Published'? <span style={{backgroundColor: "#bbe5b3", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>:
-          <span style={{backgroundColor: "#aedcf3", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>
-          }
-        </IndexTable.Cell>
-        <IndexTable.Cell> <TextStyle variation="strong">{name}</TextStyle> wrote a review:<br/><TextContainer>{review}</TextContainer></IndexTable.Cell>
-      </IndexTable.Row>
+        </div>
+      </Card>
     ),
   );
 
@@ -146,7 +201,6 @@ export default function Home() {
             <Card>
               <IndexTable
                 resourceName={resourceName}
-                totals={['', '', '', 255, '$155,830.00']}
                 itemCount={customers.length}
                 selectedItemsCount={
                   allResourcesSelected ? 'All' : selectedResources.length
@@ -155,24 +209,41 @@ export default function Home() {
                 bulkActions={bulkActions}
                 promotedBulkActions={promotedBulkActions}
                 headings={[
-                  {title: 'Rating'},
-                  {title: 'Created'},
-                  {title: 'Phone'},
-                  {title: 'Status'},
-                  {title: 'Review'},
+                  {}
                   
                 ]}
-                //hasMoreItems={true}
               >
                 
-                {rowMarkup}
+               
               </IndexTable>
-
             </Card>
-            <p>{selectedResources.join()}</p>
+            <div style={{display: 'grid', gridTemplateColumns: '5% 7% 15% 15% 17% 13% 23%', width: '100%'}}>
+            <div style={{margin: '10px'}}>
+              <a style={{color: '#6e7276', cursor: 'pointer', textDecoration: 'underline'}} onClick={() => {handleSelectionChange('page',true,customers.id)}}>All</a>
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextStyle variation='subdued'>Rating</TextStyle>
+            </div>
+            <div style={{margin: '10px'}}>
+              <p></p>
+              <TextStyle variation='subdued'>Name</TextStyle>
+            </div>
+            <div style={{margin: '10px'}}>
+            <TextStyle variation='subdued'>Created</TextStyle>
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextStyle variation='subdued'>Phone</TextStyle>
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextStyle variation='subdued'>Status</TextStyle>
+            </div>
+            <div style={{margin: '10px'}}>
+              <TextStyle variation='subdued'>Review</TextStyle>
+            </div>
+            </div>
+              {rowMarkup}
+            
           </Page>
-        
-         
         </AppProvider>
        
       </main>
