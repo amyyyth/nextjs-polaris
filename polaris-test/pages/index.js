@@ -1,25 +1,45 @@
 import Head from 'next/head';
-//import {AppProvider, Page, Card, Button, useIndexResourceState, IndexTable} from '@shopify/polaris';
-import {AppProvider, Page, Card, IndexTable, useIndexResourceState, TextStyle, Button } from  '@shopify/polaris';
+import {AppProvider, Page, Banner, Card, IndexTable, useIndexResourceState, TextStyle, Button } from  '@shopify/polaris';
 
 export default function Home() {
+  function handleApprove(selectedIds){
+    console.log('Approve: '+selectedIds.join());
+  }
+  function handleReject(selectedIds){
+    console.log('Reject: '+selectedIds.join());
+  }
+  function handleDelete(selectedIds){
+    console.log('Delete: '+selectedIds.join());
+  }
   const customers = [
     {
       id: '344',
       rating: '3',
-      url: 'customers/341',
+      url: 'customers/344',
       name: 'Mae Jemison',
       created: '20 June, 2020',
       phone: '+91 9999999999',
+      status: 'Approved',
       review: 'This is a review',
     },
     {
       id: '123',
       rating: '4',
-      url: 'customers/256',
+      url: 'customers/123',
       name: 'Ellen Ochoa',
-      created: '20 June, 2020',
+      created: '24 June, 2020',
       phone: '+91 9999999999',
+      status: 'Exported',
+      review: 'This is a review',
+    },
+    {
+      id: '355',
+      rating: '5',
+      url: 'customers/355',
+      name: 'John Watson',
+      created: '31 June, 2020',
+      phone: '+91 9999999999',
+      status: 'Published',
       review: 'This is a review',
     },
   ];
@@ -37,30 +57,23 @@ export default function Home() {
   const promotedBulkActions = [
     {
       content: 'Approve Selected',
-      onAction: () => console.log('Todo: implement bulk edit'),
+      onAction: () => handleApprove(selectedResources),
     },
     {
       content: 'Reject Selected',
-      onAction: () => console.log('Todo: implement bulk edit'),
+      onAction: () => handleReject(selectedResources),
     },
   ];
   const bulkActions = [
+    
     {
-      content: 'Add tags',
-      onAction: () => console.log(selectedResources),
-    },
-    {
-      content: 'Remove tags',
-      onAction: () => console.log('Todo: implement bulk remove tags'),
-    },
-    {
-      content: 'Delete customers',
-      onAction: () => console.log('Todo: implement bulk delete'),
+      content: 'Delete',
+      onAction: () => handleDelete(selectedResources),
     },
   ];
 
   const rowMarkup = customers.map(
-    ({id,rating, name, created, phone, review}, index) => (
+    ({id,rating, name, created, phone, review, status}, index) => (
       <IndexTable.Row
         id={id}
         key={id}
@@ -69,11 +82,30 @@ export default function Home() {
       >
         <IndexTable.Cell>{rating}</IndexTable.Cell>
         <IndexTable.Cell>
-          <TextStyle variation="strong">{name}</TextStyle><br />
-          <Button onClick={() => {console.log({name})}}> Approve</Button>
+          <TextStyle variation="strong">{name}</TextStyle><br /><br />
+          <button
+           onClick={() => {console.log('Approve: '+ String(id))}}
+           style={{
+             backgroundColor: '#2575cf',
+             padding: '5px 10px 5px 10px',
+             borderRadius: '3px',
+             outline: 'none',
+             border: 'none',
+             color: 'white',
+             cursor: 'pointer'
+           }}
+           >
+            Approve
+          </button>
         </IndexTable.Cell>
         <IndexTable.Cell>{created}</IndexTable.Cell>
         <IndexTable.Cell>{phone}</IndexTable.Cell>
+        <IndexTable.Cell>
+          {status === 'Approved'? <span style={{backgroundColor: "#f3c583", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>: 
+          status === 'Published'? <span style={{backgroundColor: "#bbe5b3", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>:
+          <span style={{backgroundColor: "#aedcf3", borderRadius: '100px', padding: '5px 10px 5px 10px'}}>{status}</span>
+          }
+        </IndexTable.Cell>
         <IndexTable.Cell>{review}</IndexTable.Cell>
       </IndexTable.Row>
     ),
@@ -110,6 +142,7 @@ export default function Home() {
                   {title: 'Name'},
                   {title: 'Created'},
                   {title: 'Phone'},
+                  {title: 'Status'},
                   {title: 'Review'},
                   
                 ]}
