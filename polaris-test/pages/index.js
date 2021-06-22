@@ -1,12 +1,88 @@
 import Head from 'next/head';
-import {AppProvider, Page, Card, Button} from '@shopify/polaris';
+//import {AppProvider, Page, Card, Button, useIndexResourceState, IndexTable} from '@shopify/polaris';
+import {AppProvider, Page, Card, IndexTable, useIndexResourceState, TextStyle, Button } from  '@shopify/polaris';
 
 export default function Home() {
+  const customers = [
+    {
+      id: '344',
+      rating: '3',
+      url: 'customers/341',
+      name: 'Mae Jemison',
+      created: '20 June, 2020',
+      phone: '+91 9999999999',
+      review: 'This is a review',
+    },
+    {
+      id: '123',
+      rating: '4',
+      url: 'customers/256',
+      name: 'Ellen Ochoa',
+      created: '20 June, 2020',
+      phone: '+91 9999999999',
+      review: 'This is a review',
+    },
+  ];
+  const resourceName = {
+    singular: 'customer',
+    plural: 'customers',
+  };
+
+  const {
+    selectedResources,
+    allResourcesSelected,
+    handleSelectionChange,
+  } = useIndexResourceState(customers);
+
+  const promotedBulkActions = [
+    {
+      content: 'Approve Selected',
+      onAction: () => console.log('Todo: implement bulk edit'),
+    },
+    {
+      content: 'Reject Selected',
+      onAction: () => console.log('Todo: implement bulk edit'),
+    },
+  ];
+  const bulkActions = [
+    {
+      content: 'Add tags',
+      onAction: () => console.log(selectedResources),
+    },
+    {
+      content: 'Remove tags',
+      onAction: () => console.log('Todo: implement bulk remove tags'),
+    },
+    {
+      content: 'Delete customers',
+      onAction: () => console.log('Todo: implement bulk delete'),
+    },
+  ];
+
+  const rowMarkup = customers.map(
+    ({id,rating, name, created, phone, review}, index) => (
+      <IndexTable.Row
+        id={id}
+        key={id}
+        selected={selectedResources.includes(id)}
+        position={index}
+      >
+        <IndexTable.Cell>{rating}</IndexTable.Cell>
+        <IndexTable.Cell>
+          <TextStyle variation="strong">{name}</TextStyle><br />
+          <Button onClick={() => {console.log({name})}}> Approve</Button>
+        </IndexTable.Cell>
+        <IndexTable.Cell>{created}</IndexTable.Cell>
+        <IndexTable.Cell>{phone}</IndexTable.Cell>
+        <IndexTable.Cell>{review}</IndexTable.Cell>
+      </IndexTable.Row>
+    ),
+  );
+
   return (
     <div className="container">
       <Head>
         <title>Trying out polaris</title>
-        <link rel="icon" href="/favicon.ico" />
         <link
           rel="stylesheet"
           href="https://unpkg.com/@shopify/polaris@6.5.0/dist/styles.css"
@@ -17,159 +93,39 @@ export default function Home() {
       <main>
         
         <AppProvider>
-          <h1 className="title">
-            Testing routing <a href="https://nextjs.org">Here</a>
-          </h1>
+          <Page>
+            <Card>
+              <IndexTable
+                resourceName={resourceName}
+                totals={['', '', '', 255, '$155,830.00']}
+                itemCount={customers.length}
+                selectedItemsCount={
+                  allResourcesSelected ? 'All' : selectedResources.length
+                }
+                onSelectionChange={handleSelectionChange}
+                bulkActions={bulkActions}
+                promotedBulkActions={promotedBulkActions}
+                headings={[
+                  {title: 'Rating'},
+                  {title: 'Name'},
+                  {title: 'Created'},
+                  {title: 'Phone'},
+                  {title: 'Review'},
+                  
+                ]}
+              >
+                
+                {rowMarkup}
+              </IndexTable>
+
+            </Card>
+            <p>{selectedResources.join()}</p>
+          </Page>
+        
          
         </AppProvider>
+       
       </main>
-
-      
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        footer img {
-          margin-left: 0.5rem;
-        }
-
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        a {
-          color: inherit;
-          text-decoration: none;
-        }
-
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
-
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
-
-        .title,
-        .description {
-          text-align: center;
-        }
-
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
-
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-
-          max-width: 800px;
-          margin-top: 3rem;
-        }
-
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
-
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
-
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
-
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        .logo {
-          height: 1em;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
     </div>
   )
 }
