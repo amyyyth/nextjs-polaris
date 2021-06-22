@@ -1,2 +1,1 @@
-# nextjs-polaris
-test
+Run `npm run dev` to run in development
