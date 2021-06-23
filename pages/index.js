@@ -98,7 +98,7 @@ export default function Home() {
     },
   ];
 
-  const rowMarkup = customers.map(
+  const tableCards = customers.map(
     ({id,rating, name, created, phone, review, status}, index) => (
       <Card style={{width: "100%",}}>
         
@@ -252,7 +252,7 @@ export default function Home() {
               <TextStyle variation='subdued'>Review</TextStyle>
             </div>
             </div>
-              {rowMarkup}
+              {tableCards}
             
           </Page>
         </AppProvider>
