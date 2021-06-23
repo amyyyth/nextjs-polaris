@@ -19,9 +19,9 @@ export default function Home() {
   }
   const customers = [
     {
-      id: '344',
+      id: '001',
       rating: '3',
-      url: 'customers/344',
+      url: 'customers/001',
       name: 'Mae Jemison',
       created: '20 June, 2020',
       phone: '+91 9999999999',
@@ -29,9 +29,9 @@ export default function Home() {
       review: 'This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review This is a review ',
     },
     {
-      id: '123',
+      id: '002',
       rating: '4',
-      url: 'customers/123',
+      url: 'customers/002',
       name: 'Ellen Ochoa',
       created: '24 June, 2020',
       phone: '+91 9999999999',
@@ -39,9 +39,9 @@ export default function Home() {
       review: 'This is a review',
     },
     {
-      id: '355',
+      id: '003',
       rating: '5',
-      url: 'customers/355',
+      url: 'customers/003',
       name: 'John Watson',
       created: '31 June, 2020',
       phone: '+91 9999999999',
@@ -49,9 +49,19 @@ export default function Home() {
       review: 'This is a review',
     },
     {
-      id: '145',
+      id: '004',
       rating: '3',
-      url: 'customers/145',
+      url: 'customers/004',
+      name: 'Sherlock Holmes',
+      created: '9 June, 2020',
+      phone: '+91 9999999999',
+      status: 'Approved',
+      review: 'This is a review',
+    },
+    {
+      id: '005',
+      rating: '3',
+      url: 'customers/005',
       name: 'Sherlock Holmes',
       created: '9 June, 2020',
       phone: '+91 9999999999',
@@ -192,7 +202,7 @@ export default function Home() {
           rel="stylesheet"
           href="https://unpkg.com/@shopify/polaris@6.5.0/dist/styles.css"
         />
-
+        <meta name="viewport" content="width=100, initial-scale=0.4"></meta>
       </Head>
 
       <main>
